@@ -35,6 +35,7 @@ import { ConfigService } from '@nestjs/config';
 @Controller('auth')
 export class AuthController {
   private rpID: string;
+  private origin: string;
 
   constructor(
     private readonly authService: AuthService,
@@ -42,6 +43,7 @@ export class AuthController {
     private readonly config: ConfigService,
   ) {
     this.rpID = this.config.get<string>('app.hostname');
+    this.origin = this.config.get<string>('app.origin');
   }
 
   @Public()
@@ -84,7 +86,7 @@ export class AuthController {
     const response = await verifyRegistrationResponse({
       response: options,
       expectedChallenge: webAuth.challenge,
-      expectedOrigin: 'http://localhost:3000',
+      expectedOrigin: this.origin,
       expectedRPID: this.rpID,
     });
 
@@ -149,7 +151,7 @@ export class AuthController {
     const response = await verifyAuthenticationResponse({
       response: options,
       expectedChallenge: webAuth.challenge,
-      expectedOrigin: 'http://localhost:3000',
+      expectedOrigin: this.origin,
       expectedRPID: this.rpID,
       credential: {
         id: webAuth.id,
@@ -200,7 +202,7 @@ export class AuthController {
     }
 
     res.redirect(
-      `http://localhost:3000/auth/callback#?email=${userAuth.email}&type=${type}&name=${userAuth.name}`,
+      `${this.origin}/auth/callback#?email=${userAuth.email}&type=${type}&name=${userAuth.name}`,
     );
   }
 }

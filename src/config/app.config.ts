@@ -5,6 +5,7 @@ export default registerAs('app', () => ({
   id: process.env.APP_ID,
   hostname: process.env.HOSTNAME,
   db: process.env.MONGO_DB_URI,
+  origin: process.env.ORIGIN
 }));
 
 export const isDev = process.env.NODE_ENV === 'development';
