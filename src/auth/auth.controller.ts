@@ -91,14 +91,20 @@ export class AuthController {
     });
 
     if (response.verified) {
+      response.registrationInfo.credential.id;
       const publicKey = isoBase64URL.fromBuffer(
         response.registrationInfo.credential.publicKey,
-        'base64url',
       );
       await this.authService.updateWebAuth(
         { email: body.email },
         {
+          id: response.registrationInfo.credential.id,
           publicKey,
+          challenge: null,
+          attestationObject: isoBase64URL.fromBuffer(
+            response.registrationInfo.attestationObject,
+            'base64url',
+          ),
           deviceType: response.registrationInfo.credentialDeviceType,
           counter: response.registrationInfo.credential.counter,
           credentialBackedUp: response.registrationInfo.credentialBackedUp,
@@ -155,18 +161,25 @@ export class AuthController {
       expectedRPID: this.rpID,
       credential: {
         id: webAuth.id,
-        publicKey: isoBase64URL.toBuffer(webAuth.publicKey, 'base64url'),
+        publicKey: new Uint8Array(isoBase64URL.toBuffer(webAuth.publicKey, 'base64url')),
         counter: webAuth.counter,
         transports: webAuth.transports as AuthenticatorTransportFuture[],
       },
     });
 
     if (response.verified) {
+      await this.authService.updateWebAuth(
+        { email: body.email },
+        { challenge: null },
+      );
       return {
         message: 'Webauth verified successfully',
         verified: response.verified,
         authenticationInfo: {
-          publicKey: isoBase64URL.toBuffer(webAuth.publicKey, 'base64url'),
+          id: response.authenticationInfo.credentialID,
+          rpID: response.authenticationInfo.rpID,
+          publicKey: webAuth.publicKey,
+          attestationObject: webAuth.attestationObject,
         },
       };
     }

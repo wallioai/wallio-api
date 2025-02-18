@@ -48,25 +48,20 @@ export class AuthService {
   }
 
   generateUniqueId() {
-    return generateId({ length: 64, dictionary: 'hex' });
+    const id = generateId({ length: 32, dictionary: 'alphanum', isUUID: true });
+    return isoBase64URL.fromUTF8String(id);
   }
 
   async generateRegistionCredentials(user: Partial<UserDocument>) {
-    const userId = Uint8Array.from(user.uniqueId, (c) => c.charCodeAt(0));
+    const userId = isoBase64URL.toBuffer(user.uniqueId, 'base64url');
     const options = await generateRegistrationOptions({
       rpID: this.rpID,
-      rpName: 'Sonic Smart Wallet',
+      rpName: 'Dexa Smart Wallet',
       userName: user.email,
       userDisplayName: user.name,
       userID: userId,
-      attestationType: 'none',
-      preferredAuthenticatorType: 'localDevice',
-      authenticatorSelection: {
-        residentKey: 'preferred',
-        userVerification: 'preferred',
-        authenticatorAttachment: 'cross-platform',
-      },
     });
+    console.log(options.user.id);
     await this.setWebAuth({
       user: user._id.toString(),
       id: options.user.id,
@@ -85,9 +80,12 @@ export class AuthService {
           transports: webAuth.transports as AuthenticatorTransportFuture[],
         },
       ],
-      challenge: isoBase64URL.toBuffer(webAuth.challenge, 'base64url'),
-      userVerification: 'preferred',
+      userVerification: 'required',
     });
+    await this.updateWebAuth(
+      { id: webAuth.id },
+      { challenge: options.challenge },
+    );
     return options;
   }
   async validateGoogleAuth(payload: GoogleAuthDto) {

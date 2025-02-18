@@ -19,6 +19,9 @@ export class WebAuth {
   email: string;
 
   @Prop()
+  attestationObject: string;
+
+  @Prop()
   publicKey: string;
 
   @Prop({ default: 0 })
