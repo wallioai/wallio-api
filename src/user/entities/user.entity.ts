@@ -23,6 +23,9 @@ export class User {
   @Prop({ lowercase: true, unique: true, required: true })
   email: string;
 
+  @Prop()
+  emailVerified: boolean;
+
   @Prop({ default: false })
   isOnboarded: boolean;
 }

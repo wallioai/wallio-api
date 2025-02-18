@@ -16,6 +16,7 @@ import {
 import { isoBase64URL } from '@simplewebauthn/server/helpers';
 import { generateId } from 'src/utils/helpers';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +25,7 @@ export class AuthService {
     @InjectModel(WebAuth.name) private webAuthModel: Model<WebAuth>,
     private readonly userService: UserService,
     private readonly config: ConfigService,
+    private jwtService: JwtService,
   ) {
     this.rpID = this.config.get<string>('app.hostname');
   }
@@ -47,6 +49,26 @@ export class AuthService {
     return `This action removes a #${id} auth`;
   }
 
+  async login(payload: Partial<UserDocument>) {
+    return await this.getTokens(payload);
+  }
+
+  async getTokens(payload: any) {
+    const accessToken = await this.jwtService.signAsync(payload, {
+      expiresIn: this.config.get<string>('auth.expiresIn'),
+    });
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      expiresIn: this.config.get<string>('auth.refreshExpiresIn'),
+    });
+    return { accessToken, refreshToken };
+  }
+
+  validateToken(token: string) {
+    return this.jwtService.verifyAsync(token, {
+      secret: this.config.get<string>('auth.jwtKey'),
+    });
+  }
+
   generateUniqueId() {
     const id = generateId({ length: 32, dictionary: 'alphanum', isUUID: true });
     return isoBase64URL.fromUTF8String(id);
@@ -61,7 +83,6 @@ export class AuthService {
       userDisplayName: user.name,
       userID: userId,
     });
-    console.log(options.user.id);
     await this.setWebAuth({
       user: user._id.toString(),
       id: options.user.id,
@@ -70,6 +91,7 @@ export class AuthService {
     });
     return options;
   }
+
   async generateLoginCredentials(webAuth: Partial<WebAuthDocument>) {
     if (!webAuth) return;
     const options = await generateAuthenticationOptions({
@@ -88,6 +110,7 @@ export class AuthService {
     );
     return options;
   }
+
   async validateGoogleAuth(payload: GoogleAuthDto) {
     const user = await this.userService.findOne({
       email: payload.email.toLowerCase(),

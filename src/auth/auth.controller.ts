@@ -31,6 +31,8 @@ import { InitLoginWebAuth, VerifyWebAuthDto } from './dto/webauthn.dto';
 import { isoBase64URL, isoUint8Array } from '@simplewebauthn/server/helpers';
 import { generateId } from 'src/utils/helpers';
 import { ConfigService } from '@nestjs/config';
+import { access } from 'fs';
+import { AppGuard } from 'src/guards/app/app.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -47,6 +49,7 @@ export class AuthController {
   }
 
   @Public()
+  @UseGuards(AppGuard)
   @Post('register/webauthn')
   async initRegisterWebAuth(@Req() req: Request, @Body() body: CreateAuthDto) {
     const user = await this.userService.findOne({
@@ -73,14 +76,22 @@ export class AuthController {
     return options;
   }
 
+  @Public()
+  @UseGuards(AppGuard)
   @Post('register/webauthn/verify')
   async verifyRegisterWebAuth(
     @Req() req: Request,
     @Body() body: VerifyWebAuthDto,
   ) {
     const options = JSON.parse(body.options) as RegistrationResponseJSON;
-    const webAuth = await this.authService.getWebAuth({ email: body.email });
-    if (!webAuth) {
+    const webAuth = await this.authService.getWebAuth({
+      email: body.email.toLowerCase(),
+    });
+    const userData = await this.userService.findOne({
+      email: body.email.toLowerCase(),
+    });
+
+    if (!webAuth || !userData) {
       throw new NotFoundException();
     }
     const response = await verifyRegistrationResponse({
@@ -112,7 +123,20 @@ export class AuthController {
         },
       );
 
+      const payload = {
+        id: userData._id.toString(),
+        email: userData.email,
+        name: userData.name,
+        username: userData.username,
+        emailVerified: userData.emailVerified,
+      };
+
+      const { refreshToken, accessToken } =
+        await this.authService.login(payload);
+
       return {
+        refreshToken,
+        accessToken,
         message: 'Webauth verified successfully',
         verified: response.verified,
         registrationInfo: {
@@ -128,6 +152,7 @@ export class AuthController {
   }
 
   @Public()
+  @UseGuards(AppGuard)
   @Get('login/webauthn/:email')
   async initLoginWebAuth(@Param('email') email: string) {
     const [webauth, user] = await Promise.all([
@@ -143,14 +168,21 @@ export class AuthController {
     return await this.authService.generateLoginCredentials(webauth);
   }
 
+  @Public()
+  @UseGuards(AppGuard)
   @Post('login/webauthn/verify')
   async verifyLoginWebAuth(
     @Req() req: Request,
     @Body() body: VerifyWebAuthDto,
   ) {
     const options = JSON.parse(body.options) as AuthenticationResponseJSON;
-    const webAuth = await this.authService.getWebAuth({ email: body.email });
-    if (!webAuth) {
+    const webAuth = await this.authService.getWebAuth({
+      email: body.email.toLowerCase(),
+    });
+    const userData = await this.userService.findOne({
+      email: body.email.toLowerCase(),
+    });
+    if (!webAuth || !userData) {
       throw new NotFoundException();
     }
 
@@ -161,7 +193,9 @@ export class AuthController {
       expectedRPID: this.rpID,
       credential: {
         id: webAuth.id,
-        publicKey: new Uint8Array(isoBase64URL.toBuffer(webAuth.publicKey, 'base64url')),
+        publicKey: new Uint8Array(
+          isoBase64URL.toBuffer(webAuth.publicKey, 'base64url'),
+        ),
         counter: webAuth.counter,
         transports: webAuth.transports as AuthenticatorTransportFuture[],
       },
@@ -172,7 +206,21 @@ export class AuthController {
         { email: body.email },
         { challenge: null },
       );
+
+      const payload = {
+        id: userData._id.toString(),
+        email: userData.email,
+        name: userData.name,
+        username: userData.username,
+        emailVerified: userData.emailVerified,
+      };
+
+      const { refreshToken, accessToken } =
+        await this.authService.login(payload);
+
       return {
+        refreshToken,
+        accessToken,
         message: 'Webauth verified successfully',
         verified: response.verified,
         authenticationInfo: {

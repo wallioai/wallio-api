@@ -10,8 +10,9 @@ import { HttpModule } from '@nestjs/axios';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { GoogleStrategy } from './strategies/google.strategy';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ResponseInterceptor } from './interceptors/response.interceptor';
+import { AuthGuard } from './guards/auth/auth.guard';
 
 @Module({
   imports: [
@@ -37,6 +38,10 @@ import { ResponseInterceptor } from './interceptors/response.interceptor';
   providers: [
     AppService,
     GoogleStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
     {
       provide: APP_INTERCEPTOR,
       useClass: ResponseInterceptor,
