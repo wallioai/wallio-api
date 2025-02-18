@@ -13,6 +13,7 @@ import { GoogleStrategy } from './strategies/google.strategy';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ResponseInterceptor } from './interceptors/response.interceptor';
 import { AuthGuard } from './guards/auth/auth.guard';
+import { AppGuard } from './guards/app/app.guard';
 
 @Module({
   imports: [
@@ -41,6 +42,10 @@ import { AuthGuard } from './guards/auth/auth.guard';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AppGuard,
     },
     {
       provide: APP_INTERCEPTOR,

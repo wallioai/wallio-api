@@ -33,6 +33,7 @@ import { generateId } from 'src/utils/helpers';
 import { ConfigService } from '@nestjs/config';
 import { access } from 'fs';
 import { AppGuard } from 'src/guards/app/app.guard';
+import { NoAppGuard } from 'src/decorators/external.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -49,7 +50,6 @@ export class AuthController {
   }
 
   @Public()
-  @UseGuards(AppGuard)
   @Post('register/webauthn')
   async initRegisterWebAuth(@Req() req: Request, @Body() body: CreateAuthDto) {
     const user = await this.userService.findOne({
@@ -77,7 +77,6 @@ export class AuthController {
   }
 
   @Public()
-  @UseGuards(AppGuard)
   @Post('register/webauthn/verify')
   async verifyRegisterWebAuth(
     @Req() req: Request,
@@ -152,7 +151,6 @@ export class AuthController {
   }
 
   @Public()
-  @UseGuards(AppGuard)
   @Get('login/webauthn/:email')
   async initLoginWebAuth(@Param('email') email: string) {
     const [webauth, user] = await Promise.all([
@@ -169,7 +167,6 @@ export class AuthController {
   }
 
   @Public()
-  @UseGuards(AppGuard)
   @Post('login/webauthn/verify')
   async verifyLoginWebAuth(
     @Req() req: Request,
@@ -239,11 +236,13 @@ export class AuthController {
   }
 
   @Public()
+  @NoAppGuard()
   @UseGuards(GoogleAuthGuard)
   @Get('google/login')
   googleLogin() {}
 
   @Public()
+  @NoAppGuard()
   @UseGuards(GoogleAuthGuard)
   @Get('google/callback')
   async googleCallback(@Req() req: Request, @Res() res: Response) {

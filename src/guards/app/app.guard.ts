@@ -9,13 +9,27 @@ import { Request } from 'express';
 import { Cookies } from 'src/enums/cookie.enum';
 import { ConfigService } from '@nestjs/config';
 import { isDev } from 'src/config/app.config';
+import { IS_NO_APP_GUARD_KEY } from 'src/decorators/external.decorator';
+import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class AppGuard implements CanActivate {
-  constructor(private config: ConfigService) {}
+  constructor(
+    private config: ConfigService,
+    private reflector: Reflector,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
+      const isNoAppGuard = this.reflector.getAllAndOverride<boolean>(
+        IS_NO_APP_GUARD_KEY,
+        [context.getHandler(), context.getClass()],
+      );
+
+      if (isNoAppGuard) {
+        return true;
+      }
+      
       const request = context.switchToHttp().getRequest();
       const token = this.extractAppKey(request);
       if (!token) {
