@@ -27,7 +27,6 @@ export class AuthGuard implements CanActivate {
         [context.getHandler(), context.getClass()],
       );
 
-      console.log('isPublic', isPublic);
       if (isPublic) {
         return true;
       }
@@ -56,15 +55,20 @@ export class AuthGuard implements CanActivate {
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
-    const cookies = request.cookies;
-    const auth = request.headers.authorization;
-    if (!cookies && !auth) {
-      throw new UnauthorizedException();
+    try {
+      const cookies = request.cookies;
+      const auth = request.headers.authorization;
+      if (!cookies && !auth) {
+        throw new UnauthorizedException();
+      }
+      const accessToken = (auth ?? cookies[Cookies.ACCESS_TOKEN] ?? '').replace(
+        /^Bearer\s/,
+        '',
+      );
+      console.log(accessToken);
+      return accessToken ? accessToken : undefined;
+    } catch (error) {
+      console.log(error);
     }
-    const accessToken = (cookies[Cookies.ACCESS_TOKEN] ?? auth ?? '').replace(
-      /^Bearer\s/,
-      '',
-    );
-    return accessToken ? accessToken : undefined;
   }
 }

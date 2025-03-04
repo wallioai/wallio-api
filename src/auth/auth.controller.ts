@@ -29,11 +29,13 @@ import {
 } from '@simplewebauthn/server';
 import { InitLoginWebAuth, VerifyWebAuthDto } from './dto/webauthn.dto';
 import { isoBase64URL, isoUint8Array } from '@simplewebauthn/server/helpers';
-import { generateId } from 'src/utils/helpers';
+import { base64URLStringToPublicKey, generateId } from 'src/utils/helpers';
 import { ConfigService } from '@nestjs/config';
 import { access } from 'fs';
 import { AppGuard } from 'src/guards/app/app.guard';
 import { NoAppGuard } from 'src/decorators/external.decorator';
+
+import { WalletService } from 'src/wallet/wallet.service';
 
 @Controller('auth')
 export class AuthController {
@@ -44,6 +46,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly config: ConfigService,
+    private readonly walletService: WalletService,
   ) {
     this.rpID = this.config.get<string>('app.hostname');
     this.origin = this.config.get<string>('app.origin');
@@ -101,20 +104,27 @@ export class AuthController {
     });
 
     if (response.verified) {
-      response.registrationInfo.credential.id;
       const publicKey = isoBase64URL.fromBuffer(
         response.registrationInfo.credential.publicKey,
+      );
+      const attestationObject = isoBase64URL.fromBuffer(
+        response.registrationInfo.attestationObject,
+        'base64url',
+      );
+      const id = response.registrationInfo.credential.id;
+      await this.walletService.generateSmartAccount(
+        attestationObject,
+        id,
+        this.rpID,
+        userData._id,
       );
       await this.authService.updateWebAuth(
         { email: body.email },
         {
-          id: response.registrationInfo.credential.id,
+          id,
           publicKey,
           challenge: null,
-          attestationObject: isoBase64URL.fromBuffer(
-            response.registrationInfo.attestationObject,
-            'base64url',
-          ),
+          attestationObject,
           deviceType: response.registrationInfo.credentialDeviceType,
           counter: response.registrationInfo.credential.counter,
           credentialBackedUp: response.registrationInfo.credentialBackedUp,

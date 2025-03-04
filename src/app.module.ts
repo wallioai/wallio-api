@@ -14,6 +14,10 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ResponseInterceptor } from './interceptors/response.interceptor';
 import { AuthGuard } from './guards/auth/auth.guard';
 import { AppGuard } from './guards/app/app.guard';
+import { AgentModule } from './agent/agent.module';
+import { NetworkModule } from './network/network.module';
+import { TokenModule } from './token/token.module';
+import { WalletModule } from './wallet/wallet.module';
 
 @Module({
   imports: [
@@ -34,6 +38,10 @@ import { AppGuard } from './guards/app/app.guard';
     HttpModule,
     AuthModule,
     UserModule,
+    AgentModule,
+    NetworkModule,
+    TokenModule,
+    WalletModule,
   ],
   controllers: [AppController],
   providers: [

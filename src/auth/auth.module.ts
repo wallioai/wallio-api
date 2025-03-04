@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { WebAuth, WebAuthSchema } from './entities/webauth.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { WalletModule } from 'src/wallet/wallet.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
+    WalletModule
   ],
   controllers: [AuthController],
   providers: [AuthService],
