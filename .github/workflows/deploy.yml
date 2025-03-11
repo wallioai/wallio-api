@@ -42,7 +42,7 @@ jobs:
       - name: Build and zip app
         run: |
           pnpm run build
-          tar -czf app.tar.gz dist package.json pnpm-lock.yaml
+          tar -czf app.tar.gz dist package.json
 
       - name: Upload artifact to server
         run: |
