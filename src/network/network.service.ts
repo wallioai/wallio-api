@@ -8,6 +8,7 @@ import { Network } from '../network/entities/network.entity';
 @Injectable()
 export class NetworkService {
   constructor(@InjectModel(Network.name) private model: Model<Network>) {}
+
   create(createNetworkDto: CreateNetworkDto) {
     return this.model.create(createNetworkDto);
   }

@@ -3,7 +3,7 @@ import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Wallet, WalletType } from './entities/wallet.entity';
-import { Model, Types } from 'mongoose';
+import { FilterQuery, Model, Types } from 'mongoose';
 import { base64URLStringToPublicKey } from 'src/utils/helpers';
 import { toWebAuthnAccount } from 'viem/account-abstraction';
 import { createPublicClient, http } from 'viem';
@@ -35,6 +35,17 @@ export class WalletService {
     return `This action removes a #${id} wallet`;
   }
 
+  findOneOrCreate(
+    filter: FilterQuery<Wallet>,
+    walletBody: Partial<Wallet>,
+  ): Promise<Wallet> {
+    return this.wallet.findOneAndUpdate(
+      filter,
+      { $setOnInsert: walletBody },
+      { upsert: true, new: true },
+    );
+  }
+
   async generateSmartAccount(
     attestationObject: string,
     id: string,
@@ -58,10 +69,14 @@ export class WalletService {
       owner,
     });
     const address = await smartAccount.getAddress();
-    await this.create({
-      address,
-      type: WalletType.Smart,
-      user: userId as unknown as User,
-    });
+    await this.findOneOrCreate(
+      { address },
+      {
+        address,
+        type: WalletType.Smart,
+        user: userId as unknown as User,
+      },
+    );
+    return address;
   }
 }

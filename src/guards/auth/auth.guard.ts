@@ -65,7 +65,6 @@ export class AuthGuard implements CanActivate {
         /^Bearer\s/,
         '',
       );
-      console.log(accessToken);
       return accessToken ? accessToken : undefined;
     } catch (error) {
       console.log(error);

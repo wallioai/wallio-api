@@ -112,7 +112,7 @@ export class AuthController {
         'base64url',
       );
       const id = response.registrationInfo.credential.id;
-      await this.walletService.generateSmartAccount(
+      const address = await this.walletService.generateSmartAccount(
         attestationObject,
         id,
         this.rpID,
@@ -150,6 +150,10 @@ export class AuthController {
         verified: response.verified,
         registrationInfo: {
           ...response.registrationInfo,
+        },
+        user: {
+          address,
+          id: userData._id.toString(),
         },
       };
     }
@@ -222,6 +226,13 @@ export class AuthController {
         emailVerified: userData.emailVerified,
       };
 
+      const address = await this.walletService.generateSmartAccount(
+        webAuth.attestationObject,
+        response.authenticationInfo.credentialID,
+        response.authenticationInfo.rpID,
+        userData._id,
+      );
+
       const { refreshToken, accessToken } =
         await this.authService.login(payload);
 
@@ -235,6 +246,10 @@ export class AuthController {
           rpID: response.authenticationInfo.rpID,
           publicKey: webAuth.publicKey,
           attestationObject: webAuth.attestationObject,
+        },
+        user: {
+          address,
+          id: userData._id.toString(),
         },
       };
     }

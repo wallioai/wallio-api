@@ -8,16 +8,22 @@ export enum NetworkType {
   mainnet = 'mainnet',
 }
 
+class NativeCurrency {
+  symbol: string;
+  decimal: number;
+  address: string;
+}
+
 @Schema({ timestamps: true })
 export class Network {
   @Prop({ unique: true, required: true, index: true })
   chainId: number;
 
   @Prop()
-  symbol?: string;
+  tokenType?: string;
 
-  @Prop({ required: true })
-  currency: string;
+  @Prop({ type: NativeCurrency })
+  nativeCurrency: NativeCurrency;
 
   @Prop({ required: true })
   name: string;
@@ -27,9 +33,6 @@ export class Network {
 
   @Prop()
   shortName: string;
-
-  @Prop()
-  coingeckoId?: string;
 
   @Prop()
   rpcUrls?: string[];
@@ -42,6 +45,18 @@ export class Network {
 
   @Prop()
   multicallAddress: string;
+
+  @Prop()
+  cgPlatformId?: string;
+
+  @Prop()
+  cgCategoryId?: string;
+
+  @Prop()
+  cgCoinId?: string;
+
+  @Prop()
+  deBridgeId?: number;
 
   @Prop({ default: false })
   isEnabled: boolean;

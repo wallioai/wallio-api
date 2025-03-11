@@ -18,6 +18,9 @@ import { AgentModule } from './agent/agent.module';
 import { NetworkModule } from './network/network.module';
 import { TokenModule } from './token/token.module';
 import { WalletModule } from './wallet/wallet.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import KeyvMongo from '@keyv/mongo';
+import Keyv from 'keyv';
 
 @Module({
   imports: [
@@ -34,6 +37,23 @@ import { WalletModule } from './wallet/wallet.module';
         uri: configService.get<string>('app.db'),
       }),
       inject: [ConfigService],
+    }),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useFactory: async () => {
+        return {
+          stores: [
+            new Keyv(
+              new KeyvMongo('mongodb://127.0.0.1:27017/sonic-smart-wallet', {
+                collection: 'cache',
+              }),
+              {
+                ttl: 60 * 60 * 1000,
+              },
+            ),
+          ],
+        };
+      },
     }),
     HttpModule,
     AuthModule,

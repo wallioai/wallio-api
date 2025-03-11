@@ -1,0 +1,234 @@
+[
+  {
+    "chainId": 146,
+    "currency": "S",
+    "name": "Sonic",
+    "nameId": "sonic",
+    "shortName": "Sonic",
+    "rpcUrls": ["https://rpc.soniclabs.com"],
+    "explorerUrl": "https://sonicscan.org",
+    "isEnabled": true,
+    "isActive": true,
+    "type": "mainnet",
+    "coingeckoId": "sonic",
+    "icon": "https://res.cloudinary.com/dztbnrl7z/image/upload/v1740246947/duysop3vuvifbi0vc2lh.png"
+  },
+  {
+    "chainId": 57054,
+    "currency": "tS",
+    "name": "Sonic Blaze Testnet",
+    "nameId": "sonic-blaze",
+    "shortName": "Sonic Blaze",
+    "rpcUrls": ["https://rpc.blaze.soniclabs.com"],
+    "explorerUrl": "https://testnet.soniclabs.com",
+    "isEnabled": true,
+    "isActive": true,
+    "type": "testnet",
+    "icon": "https://res.cloudinary.com/dztbnrl7z/image/upload/v1740246947/duysop3vuvifbi0vc2lh.png"
+  },
+  {
+    "chainId": 56,
+    "currency": "BNB",
+    "symbol": "Bep20",
+    "name": "Binance Smart Chain",
+    "nameId": "bsc",
+    "shortName": "BSC",
+    "rpcUrls": [
+      "https://bsc-mainnet.nodereal.io/v1/b611345b120143d4a489a2a23ae069a9",
+      "https://bnb-mainnet.g.alchemy.com/v2/DoYeLrMWBoXoWs5a0b2S3l1OrrfKlpVk",
+      "https://bsc-mainnet.infura.io/v3/0fcdcaa87840440f80bb2e1cf02b093b"
+    ],
+    "wssUrls": [
+      "wss://bsc-mainnet.nodereal.io/ws/v1/b611345b120143d4a489a2a23ae069a9",
+      "wss://bnb-mainnet.g.alchemy.com/v2/DoYeLrMWBoXoWs5a0b2S3l1OrrfKlpVk",
+      "wss://bsc-mainnet.infura.io/ws/v3/0fcdcaa87840440f80bb2e1cf02b093b"
+    ],
+    "explorerUrl": "https://bscscan.com",
+    "isEnabled": true,
+    "isActive": true,
+    "type": "mainnet",
+    "coingeckoId": "binance-smart-chain",
+    "multicallAddress": "0xcA11bde05977b3631167028862bE2a173976CA11",
+    "icon": "https://res.cloudinary.com/dztbnrl7z/image/upload/v1735886323/ejcas1xp9twkw4lgarrr.png"
+  },
+  {
+    "chainId": 97,
+    "currency": "tBNB",
+    "name": "BNB Smart Chain Testnet",
+    "nameId": "bsc-testnet",
+    "shortName": "BSC Testnet",
+    "rpcUrls": [
+      "https://bsc-testnet.nodereal.io/v1/b611345b120143d4a489a2a23ae069a9"
+    ],
+    "wssUrls": [
+      "wss://bsc-testnet.nodereal.io/ws/v1/b611345b120143d4a489a2a23ae069a9"
+    ],
+    "explorerUrl": "https://testnet.bscscan.com",
+    "isEnabled": false,
+    "isActive": true,
+    "type": "testnet",
+    "multicallAddress": "0xcA11bde05977b3631167028862bE2a173976CA11",
+    "icon": "https://res.cloudinary.com/dztbnrl7z/image/upload/v1735886323/ejcas1xp9twkw4lgarrr.png"
+  },
+  {
+    "chainId": 2741,
+    "currency": "ETH",
+    "name": "Abstract",
+    "nameId": "abstract",
+    "shortName": "Abstract",
+    "rpcUrls": [
+      "https://abstract-mainnet.g.alchemy.com/v2/DoYeLrMWBoXoWs5a0b2S3l1OrrfKlpVk"
+    ],
+    "wssUrls": [
+      "wss://abstract-mainnet.g.alchemy.com/v2/DoYeLrMWBoXoWs5a0b2S3l1OrrfKlpVk"
+    ],
+    "explorerUrl": "https://abscan.org",
+    "isEnabled": true,
+    "isActive": true,
+    "type": "mainnet",
+    "coingeckoId": "abstract",
+    "multicallAddress": "0xF9cda624FBC7e059355ce98a31693d299FACd963",
+    "icon": "https://res.cloudinary.com/dztbnrl7z/image/upload/v1740556573/tqwsdr5uxltrqfzu8slt.jpg"
+  },
+  {
+    "chainId": 42161,
+    "currency": "ETH",
+    "name": "Arbitrum One",
+    "nameId": "arbitrum",
+    "shortName": "Arbitrum",
+    "rpcUrls": [
+      "https://arb-mainnet.g.alchemy.com/v2/DoYeLrMWBoXoWs5a0b2S3l1OrrfKlpVk",
+      "https://open-platform.nodereal.io/b611345b120143d4a489a2a23ae069a9/arbitrum-nitro"
+    ],
+    "wssUrls": [
+      "wss://arb-mainnet.g.alchemy.com/v2/DoYeLrMWBoXoWs5a0b2S3l1OrrfKlpVk",
+      "wss://open-platform.nodereal.io/ws/b611345b120143d4a489a2a23ae069a9/arbitrum-nitro"
+    ],
+    "explorerUrl": "https://arbiscan.io",
+    "isEnabled": false,
+    "isActive": true,
+    "type": "mainnet",
+    "coingeckoId": "arbitrum-one",
+    "multicallAddress": "0xcA11bde05977b3631167028862bE2a173976CA11",
+    "icon": "https://res.cloudinary.com/dztbnrl7z/image/upload/v1740557648/xfqisk6hvsnbsjqtxmp1.png"
+  },
+  {
+    "chainId": 1,
+    "currency": "ETH",
+    "symbol": "ERC20",
+    "name": "Ethereum",
+    "nameId": "ethereum",
+    "shortName": "Ethereum",
+    "rpcUrls": [
+      "https://eth-mainnet.nodereal.io/v1/b611345b120143d4a489a2a23ae069a9",
+      "https://eth-mainnet.g.alchemy.com/v2/DoYeLrMWBoXoWs5a0b2S3l1OrrfKlpVk",
+      "https://mainnet.infura.io/v3/0fcdcaa87840440f80bb2e1cf02b093b"
+    ],
+    "wssUrls": [
+      "wss://eth-mainnet.nodereal.io/ws/v1/b611345b120143d4a489a2a23ae069a9",
+      "wss://eth-mainnet.g.alchemy.com/v2/DoYeLrMWBoXoWs5a0b2S3l1OrrfKlpVk",
+      "wss://mainnet.infura.io/ws/v3/0fcdcaa87840440f80bb2e1cf02b093b"
+    ],
+    "explorerUrl": "https://arbiscan.io",
+    "isEnabled": true,
+    "isActive": true,
+    "type": "mainnet",
+    "coingeckoId": "ethereum",
+    "icon": "https://res.cloudinary.com/dztbnrl7z/image/upload/v1738879886/fempmbn0k7ui8lztl7r5.png"
+  },
+  {
+    "chainId": 8453,
+    "currency": "ETH",
+    "name": "Base",
+    "nameId": "base",
+    "shortName": "Base",
+    "rpcUrls": [
+      "https://open-platform.nodereal.io/b611345b120143d4a489a2a23ae069a9/base",
+      "https://base-mainnet.g.alchemy.com/v2/DoYeLrMWBoXoWs5a0b2S3l1OrrfKlpVk",
+      "https://base-mainnet.infura.io/v3/0fcdcaa87840440f80bb2e1cf02b093b"
+    ],
+    "wssUrls": [
+      "wss://base-mainnet.g.alchemy.com/v2/DoYeLrMWBoXoWs5a0b2S3l1OrrfKlpVk",
+      "wss://base-mainnet.infura.io/ws/v3/0fcdcaa87840440f80bb2e1cf02b093b"
+    ],
+    "explorerUrl": "https://basescan.org",
+    "isEnabled": true,
+    "isActive": true,
+    "type": "mainnet",
+    "coingeckoId": "base",
+    "multicallAddress": "0xcA11bde05977b3631167028862bE2a173976CA11",
+    "icon": "https://res.cloudinary.com/dztbnrl7z/image/upload/v1738877221/abnkjrfiuabojpjfyucj.png"
+  },
+  {
+    "chainId": 84532,
+    "currency": "ETH",
+    "name": "Base Sepolia",
+    "nameId": "base-sepolia",
+    "shortName": "Base Sepolia",
+    "rpcUrls": [
+      "https://base-sepolia.g.alchemy.com/v2/DoYeLrMWBoXoWs5a0b2S3l1OrrfKlpVk",
+      "https://base-sepolia.infura.io/v3/0fcdcaa87840440f80bb2e1cf02b093b"
+    ],
+    "wssUrls": [
+      "wss://base-sepolia.g.alchemy.com/v2/DoYeLrMWBoXoWs5a0b2S3l1OrrfKlpVk",
+      "wss://base-sepolia.infura.io/ws/v3/0fcdcaa87840440f80bb2e1cf02b093b"
+    ],
+    "explorerUrl": "https://sepolia.basescan.org",
+    "isEnabled": false,
+    "isActive": true,
+    "type": "testnet",
+    "multicallAddress": "0xcA11bde05977b3631167028862bE2a173976CA11",
+    "icon": "https://res.cloudinary.com/dztbnrl7z/image/upload/v1738877221/abnkjrfiuabojpjfyucj.png"
+  },
+  {
+    "chainId": 137,
+    "currency": "POL",
+    "name": "Polygon POS",
+    "nameId": "polygon",
+    "shortName": "Polygon",
+    "rpcUrls": [
+      "https://polygon-mainnet.g.alchemy.com/v2/DoYeLrMWBoXoWs5a0b2S3l1OrrfKlpVk",
+      "https://polygon-mainnet.infura.io/v3/0fcdcaa87840440f80bb2e1cf02b093b"
+    ],
+    "wssUrls": [
+      "wss://polygon-mainnet.g.alchemy.com/v2/DoYeLrMWBoXoWs5a0b2S3l1OrrfKlpVk",
+      "wss://polygon-mainnet.infura.io/ws/v3/0fcdcaa87840440f80bb2e1cf02b093b"
+    ],
+    "explorerUrl": "https://polygonscan.com",
+    "isEnabled": false,
+    "isActive": true,
+    "type": "mainnet",
+    "coingeckoId": "polygon-pos",
+    "multicallAddress": "0xcA11bde05977b3631167028862bE2a173976CA11",
+    "icon": "https://res.cloudinary.com/dztbnrl7z/image/upload/v1740559932/m85snwuqn9fdgchyovu5.png"
+  }
+]
+
+[
+  {
+    "chainId": 1,
+    "currency": "ETH",
+    "symbol": "ERC20",
+    "name": "Ethereum",
+    "nameId": "ethereum",
+    "shortName": "Ethereum",
+    "rpcUrls": [
+      "https://eth-mainnet.nodereal.io/v1/b611345b120143d4a489a2a23ae069a9",
+      "https://eth-mainnet.g.alchemy.com/v2/DoYeLrMWBoXoWs5a0b2S3l1OrrfKlpVk",
+      "https://mainnet.infura.io/v3/0fcdcaa87840440f80bb2e1cf02b093b"
+    ],
+    "wssUrls": [
+      "wss://eth-mainnet.nodereal.io/ws/v1/b611345b120143d4a489a2a23ae069a9",
+      "wss://eth-mainnet.g.alchemy.com/v2/DoYeLrMWBoXoWs5a0b2S3l1OrrfKlpVk",
+      "wss://mainnet.infura.io/ws/v3/0fcdcaa87840440f80bb2e1cf02b093b"
+    ],
+    "explorerUrl": "https://arbiscan.io",
+    "isEnabled": true,
+    "isActive": true,
+    "type": "mainnet",
+    "cgPlatformId": "ethereum",
+    "cgCategoryId": "ethereum",
+    "deBridgeId": 1,
+    "icon": "https://res.cloudinary.com/dztbnrl7z/image/upload/v1738879886/fempmbn0k7ui8lztl7r5.png"
+  }
+]
