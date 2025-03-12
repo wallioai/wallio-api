@@ -33,6 +33,8 @@ export class AppGuard implements CanActivate {
 
       const request = context.switchToHttp().getRequest();
       const token = this.extractAppKey(request);
+      console.log('Origin:', request.origin);
+      console.log('Referer:', request.referer);
       console.log('Request', request);
       console.log('Token', token);
       console.log('Hostname', request.hostname);
