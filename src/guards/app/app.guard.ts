@@ -41,6 +41,14 @@ export class AppGuard implements CanActivate {
         : request.hostname == this.config.get<string>('app.origin');
       const isValid = token == this.config.get<string>('app.id');
 
+      console.log("isOrigin", isOrigin);
+      console.log("isValid", isValid);
+      console.log("token", token);
+      console.log("app.id", this.config.get<string>('app.id'));
+      console.log("app.origin", this.config.get<string>('app.origin'));
+      console.log("app.hostname", this.config.get<string>('app.hostname'));
+      console.log('Request Hostname', request.hostname);
+
       if (!isOrigin || !isValid) {
         throw new UnauthorizedException();
       }
