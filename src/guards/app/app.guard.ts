@@ -26,12 +26,15 @@ export class AppGuard implements CanActivate {
         [context.getHandler(), context.getClass()],
       );
 
+      console.log(isNoAppGuard);
       if (isNoAppGuard) {
         return true;
       }
       
       const request = context.switchToHttp().getRequest();
       const token = this.extractAppKey(request);
+      console.log(token);
+      console.log(request.hostname);
       if (!token) {
         throw new UnauthorizedException();
       }
