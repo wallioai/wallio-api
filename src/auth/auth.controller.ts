@@ -55,6 +55,7 @@ export class AuthController {
   @Public()
   @Post('register/webauthn')
   async initRegisterWebAuth(@Req() req: Request, @Body() body: CreateAuthDto) {
+    console.log(req);
     const user = await this.userService.findOne({
       email: body.email.toLowerCase(),
     });
@@ -285,6 +286,8 @@ export class AuthController {
     } else if (userAuth && !webauth) {
       type = 'register';
     }
+
+    console.log(this.origin);
 
     res.redirect(
       `${this.origin}/auth/callback#?email=${userAuth.email}&type=${type}&name=${userAuth.name}`,
