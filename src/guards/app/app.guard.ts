@@ -63,6 +63,8 @@ export class AppGuard implements CanActivate {
 
   private extractAppKey(request: Request): string | undefined {
     const appKey = request.headers[Cookies.APP_KEY];
+    console.log('App Key', appKey);
+    console.log('Headers', request.headers);
     if (!appKey) {
       throw new UnauthorizedException();
     }
