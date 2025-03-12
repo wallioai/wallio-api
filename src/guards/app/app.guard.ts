@@ -26,15 +26,15 @@ export class AppGuard implements CanActivate {
         [context.getHandler(), context.getClass()],
       );
 
-      console.log(isNoAppGuard);
+      console.log('No App Guard', isNoAppGuard);
       if (isNoAppGuard) {
         return true;
       }
-      
+
       const request = context.switchToHttp().getRequest();
       const token = this.extractAppKey(request);
-      console.log(token);
-      console.log(request.hostname);
+      console.log('Token', token);
+      console.log('Hostname', request.hostname);
       if (!token) {
         throw new UnauthorizedException();
       }
@@ -44,12 +44,12 @@ export class AppGuard implements CanActivate {
         : request.hostname == this.config.get<string>('app.origin');
       const isValid = token == this.config.get<string>('app.id');
 
-      console.log("isOrigin", isOrigin);
-      console.log("isValid", isValid);
-      console.log("token", token);
-      console.log("app.id", this.config.get<string>('app.id'));
-      console.log("app.origin", this.config.get<string>('app.origin'));
-      console.log("app.hostname", this.config.get<string>('app.hostname'));
+      console.log('isOrigin', isOrigin);
+      console.log('isValid', isValid);
+      console.log('token', token);
+      console.log('app.id', this.config.get<string>('app.id'));
+      console.log('app.origin', this.config.get<string>('app.origin'));
+      console.log('app.hostname', this.config.get<string>('app.hostname'));
       console.log('Request Hostname', request.hostname);
 
       if (!isOrigin || !isValid) {
