@@ -26,36 +26,19 @@ export class AppGuard implements CanActivate {
         [context.getHandler(), context.getClass()],
       );
 
-      console.log('No App Guard', isNoAppGuard);
       if (isNoAppGuard) {
         return true;
       }
 
       const request = context.switchToHttp().getRequest();
       const token = this.extractAppKey(request);
-      console.log('Origin:', request.origin);
-      console.log('Referer:', request.referer);
-      console.log('Request', request);
-      console.log('Token', token);
-      console.log('Hostname', request.hostname);
       if (!token) {
         throw new UnauthorizedException();
       }
 
-      const isOrigin = isDev
-        ? request.hostname === 'localhost'
-        : request.hostname == this.config.get<string>('app.origin');
       const isValid = token == this.config.get<string>('app.id');
 
-      console.log('isOrigin', isOrigin);
-      console.log('isValid', isValid);
-      console.log('token', token);
-      console.log('app.id', this.config.get<string>('app.id'));
-      console.log('app.origin', this.config.get<string>('app.origin'));
-      console.log('app.hostname', this.config.get<string>('app.hostname'));
-      console.log('Request Hostname', request.hostname);
-
-      if (!isOrigin || !isValid) {
+      if (!isValid) {
         throw new UnauthorizedException();
       }
       return true;
@@ -66,8 +49,6 @@ export class AppGuard implements CanActivate {
 
   private extractAppKey(request: Request): string | undefined {
     const appKey = request.headers[Cookies.APP_KEY];
-    console.log('App Key', appKey);
-    console.log('Headers', request.headers);
     if (!appKey) {
       throw new UnauthorizedException();
     }
