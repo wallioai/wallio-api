@@ -42,11 +42,11 @@ import Keyv from 'keyv';
     }),
     CacheModule.registerAsync({
       isGlobal: true,
-      useFactory: async () => {
+      useFactory: async (configService: ConfigService) => {
         return {
           stores: [
             new Keyv(
-              new KeyvMongo('mongodb://127.0.0.1:27017/sonic-smart-wallet', {
+              new KeyvMongo(configService.get<string>('app.db'), {
                 collection: 'cache',
               }),
               {
@@ -56,6 +56,7 @@ import Keyv from 'keyv';
           ],
         };
       },
+      inject: [ConfigService],
     }),
     HttpModule,
     AuthModule,
