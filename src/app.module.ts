@@ -46,7 +46,7 @@ import Keyv from 'keyv';
         return {
           stores: [
             new Keyv(
-              new KeyvMongo(configService.get<string>('app.db'), {
+              new KeyvMongo(configService.get<string>('app.cache-db'), {
                 collection: 'cache',
               }),
               {
