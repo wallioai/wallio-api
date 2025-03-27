@@ -5,9 +5,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Wallet, WalletType } from './entities/wallet.entity';
 import { FilterQuery, Model, Types } from 'mongoose';
 import { base64URLStringToPublicKey } from 'src/utils/helpers';
-import { toWebAuthnAccount } from 'viem/account-abstraction';
+import {
+  toWebAuthnAccount,
+  toCoinbaseSmartAccount,
+} from 'viem/account-abstraction';
 import { createPublicClient, http } from 'viem';
-import { sonicTestnet } from 'viem/chains';
+import { bsc, mainnet, sonicTestnet } from 'viem/chains';
 import { toWallioSmartAccount } from './account/account/toWallioSmartAccount';
 import { User } from 'src/user/entities/user.entity';
 
@@ -60,13 +63,13 @@ export class WalletService {
       },
       rpId,
     });
-    const smartAccount = await toWallioSmartAccount({
+    const smartAccount = await toCoinbaseSmartAccount({
       //@ts-ignore
       client: createPublicClient({
-        chain: sonicTestnet,
-        transport: http('https://rpc.blaze.soniclabs.com'),
+        chain: mainnet,
+        transport: http(''),
       }),
-      owner,
+      owners: [owner],
     });
     const address = await smartAccount.getAddress();
     await this.findOneOrCreate(

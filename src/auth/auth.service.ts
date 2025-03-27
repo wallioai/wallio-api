@@ -82,6 +82,17 @@ export class AuthService {
       userName: user.email,
       userDisplayName: user.name,
       userID: userId,
+      excludeCredentials: [],
+      authenticatorSelection: {
+        // Allow both platform (like TouchID) and cross-platform (like security keys)
+        authenticatorAttachment: 'platform',
+        // Require resident key for better UX
+        residentKey: 'required',
+        // Require user verification (biometric or PIN)
+        userVerification: 'required',
+      },
+      // Support multiple devices with the same passkey
+      attestationType: 'none',
     });
     await this.setWebAuth({
       user: user._id.toString(),

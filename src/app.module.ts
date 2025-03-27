@@ -19,6 +19,8 @@ import { NetworkModule } from './network/network.module';
 import { TokenModule } from './token/token.module';
 import { WalletModule } from './wallet/wallet.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { ThreadModule } from './thread/thread.module';
+import { BridgeModule } from './bridge/bridge.module';
 import KeyvMongo from '@keyv/mongo';
 import Keyv from 'keyv';
 
@@ -62,6 +64,8 @@ import Keyv from 'keyv';
     NetworkModule,
     TokenModule,
     WalletModule,
+    ThreadModule,
+    BridgeModule,
   ],
   controllers: [AppController],
   providers: [

@@ -85,83 +85,87 @@ export class AuthController {
     @Req() req: Request,
     @Body() body: VerifyWebAuthDto,
   ) {
-    const options = JSON.parse(body.options) as RegistrationResponseJSON;
-    const webAuth = await this.authService.getWebAuth({
-      email: body.email.toLowerCase(),
-    });
-    const userData = await this.userService.findOne({
-      email: body.email.toLowerCase(),
-    });
+    try {
+      const options = JSON.parse(body.options) as RegistrationResponseJSON;
+      const webAuth = await this.authService.getWebAuth({
+        email: body.email.toLowerCase(),
+      });
+      const userData = await this.userService.findOne({
+        email: body.email.toLowerCase(),
+      });
 
-    if (!webAuth || !userData) {
-      throw new NotFoundException();
-    }
-    const response = await verifyRegistrationResponse({
-      response: options,
-      expectedChallenge: webAuth.challenge,
-      expectedOrigin: this.origin,
-      expectedRPID: this.rpID,
-    });
+      if (!webAuth || !userData) {
+        throw new NotFoundException();
+      }
+      const response = await verifyRegistrationResponse({
+        response: options,
+        expectedChallenge: webAuth.challenge,
+        expectedOrigin: this.origin,
+        expectedRPID: this.rpID,
+      });
 
-    if (response.verified) {
-      const publicKey = isoBase64URL.fromBuffer(
-        response.registrationInfo.credential.publicKey,
-      );
-      const attestationObject = isoBase64URL.fromBuffer(
-        response.registrationInfo.attestationObject,
-        'base64url',
-      );
-      const id = response.registrationInfo.credential.id;
-      const address = await this.walletService.generateSmartAccount(
-        attestationObject,
-        id,
-        this.rpID,
-        userData._id,
-      );
-      await this.authService.updateWebAuth(
-        { email: body.email },
-        {
-          id,
-          publicKey,
-          challenge: null,
+      if (response.verified) {
+        const publicKey = isoBase64URL.fromBuffer(
+          response.registrationInfo.credential.publicKey,
+        );
+        const attestationObject = isoBase64URL.fromBuffer(
+          response.registrationInfo.attestationObject,
+          'base64url',
+        );
+        const id = response.registrationInfo.credential.id;
+        const address = await this.walletService.generateSmartAccount(
           attestationObject,
-          deviceType: response.registrationInfo.credentialDeviceType,
-          counter: response.registrationInfo.credential.counter,
-          credentialBackedUp: response.registrationInfo.credentialBackedUp,
-          transports: response.registrationInfo.credential.transports,
-        },
-      );
+          id,
+          this.rpID,
+          userData._id,
+        );
+        await this.authService.updateWebAuth(
+          { email: body.email },
+          {
+            id,
+            publicKey,
+            challenge: null,
+            attestationObject,
+            deviceType: response.registrationInfo.credentialDeviceType,
+            counter: response.registrationInfo.credential.counter,
+            credentialBackedUp: response.registrationInfo.credentialBackedUp,
+            transports: response.registrationInfo.credential.transports,
+          },
+        );
 
-      const payload = {
-        id: userData._id.toString(),
-        email: userData.email,
-        name: userData.name,
-        username: userData.username,
-        emailVerified: userData.emailVerified,
-      };
+        const payload = {
+          id: userData._id.toString(),
+          email: userData.email,
+          name: userData.name,
+          username: userData.username,
+          emailVerified: userData.emailVerified,
+        };
 
-      const { refreshToken, accessToken } =
-        await this.authService.login(payload);
+        const { refreshToken, accessToken } =
+          await this.authService.login(payload);
+
+        return {
+          refreshToken,
+          accessToken,
+          message: 'Webauth verified successfully',
+          verified: response.verified,
+          registrationInfo: {
+            ...response.registrationInfo,
+          },
+          user: {
+            address,
+            id: userData._id.toString(),
+          },
+        };
+      }
 
       return {
-        refreshToken,
-        accessToken,
-        message: 'Webauth verified successfully',
         verified: response.verified,
-        registrationInfo: {
-          ...response.registrationInfo,
-        },
-        user: {
-          address,
-          id: userData._id.toString(),
-        },
+        message: 'Webauth verification failed',
       };
+    } catch (error) {
+      console.log(error);
     }
-
-    return {
-      verified: response.verified,
-      message: 'Webauth verification failed',
-    };
   }
 
   @Public()
